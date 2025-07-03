@@ -43,10 +43,10 @@ export default function ReadyPage() {
   }, [countdown, gameState, router, deckId]);
 
   const handleStart = async () => {
-    // Check for DeviceMotionEvent and request permission
-    if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
+    // Check for DeviceOrientationEvent and request permission for tilt controls
+    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
       try {
-        const permission = await (DeviceMotionEvent as any).requestPermission();
+        const permission = await (DeviceOrientationEvent as any).requestPermission();
         if (permission === 'granted') {
           setPermissionState('granted');
           setGameState('countdown');

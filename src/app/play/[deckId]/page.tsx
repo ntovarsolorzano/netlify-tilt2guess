@@ -7,8 +7,10 @@ import { useGameSettings } from '@/hooks/use-game-settings';
 import { Button } from '@/components/ui/button';
 import { X, Check } from 'lucide-react';
 
-const TILT_THRESHOLD_UP = -15;
-const TILT_THRESHOLD_DOWN = 15;
+// Using absolute tilt angles now. Assumes phone is vertical on forehead (beta ~90deg).
+// A tilt of ~40 degrees in either direction is required.
+const TILT_THRESHOLD_UP = 130; // Tilt screen toward ceiling to Pass
+const TILT_THRESHOLD_DOWN = 50; // Tilt screen toward floor for Correct
 
 type TiltState = 'neutral' | 'correct' | 'pass';
 type GameStatus = 'playing' | 'paused' | 'ended';
@@ -92,17 +94,22 @@ export default function GameplayPage() {
   }, [status, words, currentWordIndex, nextWord]);
   
   useEffect(() => {
-    const handleMotion = (event: DeviceMotionEvent) => {
-      const beta = event.rotationRate?.beta;
-      if (beta === null || beta === undefined) return;
-      if (beta > TILT_THRESHOLD_DOWN) {
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      const beta = event.beta; // Front-to-back tilt in degrees
+      if (beta === null) return;
+      
+      // Correct: Tilt down (beta decreases from 90)
+      if (beta < TILT_THRESHOLD_DOWN) {
         handleCorrect();
-      } else if (beta < TILT_THRESHOLD_UP) {
+      } 
+      // Pass: Tilt up (beta increases from 90)
+      else if (beta > TILT_THRESHOLD_UP) {
         handlePass();
       }
     };
-    window.addEventListener('devicemotion', handleMotion);
-    return () => window.removeEventListener('devicemotion', handleMotion);
+    
+    window.addEventListener('deviceorientation', handleOrientation);
+    return () => window.removeEventListener('deviceorientation', handleOrientation);
   }, [handleCorrect, handlePass]);
 
   const getBackgroundColor = () => {
