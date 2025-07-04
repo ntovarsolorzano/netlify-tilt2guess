@@ -6,6 +6,7 @@ import { getDeckById, WordDeck } from '@/lib/decks';
 import { useGameSettings } from '@/hooks/use-game-settings';
 import { Button } from '@/components/ui/button';
 import { X, Check } from 'lucide-react';
+import { useMusic } from '@/hooks/use-music';
 
 // Using absolute tilt angles now. Assumes phone is vertical on forehead (beta ~90deg).
 // A tilt of ~40 degrees in either direction is required.
@@ -20,6 +21,7 @@ export default function GameplayPage() {
   const params = useParams();
   const deckId = params.deckId as string;
   const { settings } = useGameSettings();
+  const { stopMusic } = useMusic();
 
   const [deck, setDeck] = useState<WordDeck | null>(null);
   const [words, setWords] = useState<string[]>([]);
@@ -52,9 +54,10 @@ export default function GameplayPage() {
   }, [deckId]);
 
   const endGame = useCallback(() => {
+    stopMusic();
     setStatus('ended');
     router.replace(`/results?deckId=${deckId}&score=${score}&guessed=${guessedWords.join(',')}&passed=${passedWords.join(',')}`);
-  }, [router, deckId, score, guessedWords, passedWords]);
+  }, [router, deckId, score, guessedWords, passedWords, stopMusic]);
 
   useEffect(() => {
     if (status !== 'playing' || words.length === 0) return;

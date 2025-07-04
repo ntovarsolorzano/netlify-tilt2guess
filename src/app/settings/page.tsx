@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { GameContainer } from '@/components/game-container';
-import { ArrowLeft, LogIn, LogOut, Moon, Sun, Monitor } from 'lucide-react';
+import { ArrowLeft, LogIn, LogOut, Moon, Sun, Monitor, Sparkles, Flame, Ban } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useGameSettings } from '@/hooks/use-game-settings';
@@ -89,6 +89,42 @@ export default function SettingsPage() {
                   </div>
               </RadioGroup>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline">Homepage Animation</CardTitle>
+            <CardDescription>Select a background animation for the home screen.</CardDescription>
+          </CardHeader>
+          <CardContent>
+             <RadioGroup
+                value={settings.homeAnimation}
+                onValueChange={(value: 'festivity' | 'fire' | 'none') => updateSettings({ homeAnimation: value })}
+                className="grid grid-cols-3 gap-4"
+              >
+                  <div>
+                    <RadioGroupItem value="festivity" id="anim-festivity" className="sr-only" />
+                    <Label htmlFor="anim-festivity" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary">
+                        <Sparkles className="h-8 w-8 mb-2" />
+                        Festivity
+                    </Label>
+                  </div>
+                  <div>
+                    <RadioGroupItem value="fire" id="anim-fire" className="sr-only" />
+                    <Label htmlFor="anim-fire" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary">
+                        <Flame className="h-8 w-8 mb-2" />
+                        Fire
+                    </Label>
+                  </div>
+                  <div>
+                    <RadioGroupItem value="none" id="anim-none" className="sr-only" />
+                    <Label htmlFor="anim-none" className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary">
+                        <Ban className="h-8 w-8 mb-2" />
+                        None
+                    </Label>
+                  </div>
+              </RadioGroup>
           </CardContent>
         </Card>
 

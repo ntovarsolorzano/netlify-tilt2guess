@@ -5,11 +5,13 @@ import { useState, useEffect, useCallback } from 'react';
 type Settings = {
   duration: number;
   theme: 'light' | 'dark' | 'system';
+  homeAnimation: 'festivity' | 'fire' | 'none';
 };
 
 const defaultSettings: Settings = {
   duration: 60,
   theme: 'dark',
+  homeAnimation: 'festivity',
 };
 
 export function useGameSettings() {
