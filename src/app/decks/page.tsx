@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getDecks, type WordDeck } from '@/lib/decks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,15 +19,24 @@ function DeckCard({ deck }: { deck: WordDeck }) {
   };
   
   return (
-    <Card className="flex flex-col justify-between hover:border-primary transition-all duration-200">
-      <CardHeader>
-        <CardTitle className="font-headline text-2xl flex justify-between items-start">
+    <Card className="flex flex-col text-center hover:border-primary transition-all duration-200">
+      <CardHeader className="pb-2">
+        <CardTitle className="font-headline text-lg flex justify-between items-start h-12">
           {deck.name}
-          {deck.isPremium && <Star className="h-5 w-5 text-accent fill-accent" />}
+          {deck.isPremium && <Star className="h-5 w-5 text-accent fill-accent flex-shrink-0" />}
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <Button asChild className="w-full font-bold" disabled={deck.isPremium} onClick={handlePlayClick}>
+      <CardContent className="flex-1 flex flex-col items-center justify-center p-4">
+        <div className="flex-1 flex items-center justify-center my-4">
+          <Image
+            src={deck.stickerUrl}
+            alt={`${deck.name} deck icon`}
+            width={100}
+            height={100}
+            className="object-contain"
+          />
+        </div>
+        <Button asChild className="w-full font-bold mt-auto" disabled={deck.isPremium} onClick={handlePlayClick}>
           <Link href={`/play/${deck.id}/ready`}>
             {deck.isPremium && <Lock className="mr-2 h-4 w-4" />}
             {deck.isPremium ? 'Unlock' : 'Play'}
