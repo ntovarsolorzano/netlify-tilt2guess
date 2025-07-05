@@ -33,7 +33,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   return React.createElement(
     MusicContext.Provider,
     { value: { playMusic, stopMusic, isPlaying } },
-    React.createElement('audio', { ref: audioRef, src: "/media/music/Lights.mp4", preload: "auto" }),
+    React.createElement('audio', { ref: audioRef, src: "/api/music", preload: "auto" }),
     children
   );
 }
