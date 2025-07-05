@@ -6,7 +6,6 @@ import { GameContainer } from '@/components/game-container';
 import { getDeckById, WordDeck } from '@/lib/decks';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { useMusic } from '@/hooks/use-music';
 
 type PermissionState = 'prompt' | 'granted' | 'denied';
 
@@ -18,7 +17,6 @@ export default function ReadyPage() {
   const router = useRouter();
   const params = useParams();
   const deckId = params.deckId as string;
-  const { playMusic } = useMusic();
 
   useEffect(() => {
     if (deckId) {
@@ -45,12 +43,10 @@ export default function ReadyPage() {
   }, [countdown, gameState, router, deckId]);
 
   const handleStart = async () => {
-    playMusic();
-    
     // Check for DeviceOrientationEvent and request permission for tilt controls
     if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
       try {
-        const permission = await (DeviceOrientationEvent as any).requestPermission();
+        const permission = await (DeviceOrientationeEvent as any).requestPermission();
         if (permission === 'granted') {
           setPermissionState('granted');
           setGameState('countdown');

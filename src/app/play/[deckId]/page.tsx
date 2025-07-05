@@ -21,7 +21,7 @@ export default function GameplayPage() {
   const params = useParams();
   const deckId = params.deckId as string;
   const { settings } = useGameSettings();
-  const { stopMusic } = useMusic();
+  const { playMusic, stopMusic } = useMusic();
 
   const [deck, setDeck] = useState<WordDeck | null>(null);
   const [words, setWords] = useState<string[]>([]);
@@ -35,6 +35,10 @@ export default function GameplayPage() {
   
   const [tiltState, setTiltState] = useState<TiltState>('neutral');
   const isTilted = useRef(false);
+
+  useEffect(() => {
+    playMusic();
+  }, [playMusic]);
 
   useEffect(() => {
     const shuffleArray = (array: string[]) => {
