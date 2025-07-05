@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useRef, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useRef, useState, useCallback, ReactNode, useEffect } from 'react';
+import { useGameSettings } from './use-game-settings';
 
 type MusicContextType = {
   playTrack: (src: string) => void;
@@ -13,6 +14,14 @@ const MusicContext = createContext<MusicContextType | null>(null);
 export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { settings } = useGameSettings();
+
+  // Effect to control the muted state of the audio element
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = settings.isMuted;
+    }
+  }, [settings.isMuted]);
 
   const playTrack = useCallback((src: string) => {
     if (audioRef.current) {

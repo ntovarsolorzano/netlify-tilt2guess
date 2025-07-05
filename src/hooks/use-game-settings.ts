@@ -6,12 +6,14 @@ type Settings = {
   duration: number;
   theme: 'light' | 'dark' | 'system';
   homeAnimation: 'festivity' | 'fire' | 'none';
+  isMuted: boolean;
 };
 
 const defaultSettings: Settings = {
   duration: 60,
   theme: 'dark',
   homeAnimation: 'festivity',
+  isMuted: false,
 };
 
 export function useGameSettings() {
