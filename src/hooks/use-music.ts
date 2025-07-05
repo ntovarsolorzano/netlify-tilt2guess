@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useRef, useState, useCallback, ReactNode } from 'react';
 
 type MusicContextType = {
-  playMusic: () => void;
+  playTrack: (src: string) => void;
   stopMusic: () => void;
   isPlaying: boolean;
 };
@@ -14,10 +14,14 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const playMusic = useCallback(() => {
+  const playTrack = useCallback((src: string) => {
     if (audioRef.current) {
+      if (!audioRef.current.src.endsWith(src)) {
+        audioRef.current.src = src;
+      }
       audioRef.current.loop = true;
-      audioRef.current.play().catch(error => console.error("Audio play failed. User interaction may be required.", error));
+      audioRef.current.volume = 0.5;
+      audioRef.current.play().catch(error => console.error("Audio play failed.", error));
       setIsPlaying(true);
     }
   }, []);
@@ -32,8 +36,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
   return React.createElement(
     MusicContext.Provider,
-    { value: { playMusic, stopMusic, isPlaying } },
-    React.createElement('audio', { ref: audioRef, src: "/api/music", preload: "auto" }),
+    { value: { playTrack, stopMusic, isPlaying } },
+    React.createElement('audio', { ref: audioRef, preload: "auto" }),
     children
   );
 }
