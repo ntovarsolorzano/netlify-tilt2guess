@@ -5,7 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { GameContainer } from '@/components/game-container';
 import { getDeckById, WordDeck } from '@/lib/decks';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 type PermissionState = 'prompt' | 'granted' | 'denied';
 
@@ -85,6 +86,12 @@ export default function ReadyPage() {
   
   return (
     <GameContainer className="flex flex-col items-center justify-center bg-primary text-primary-foreground text-center p-4">
+      <Button asChild variant="ghost" size="icon" className="absolute top-4 left-4 text-primary-foreground hover:bg-white/20 hover:text-primary-foreground z-10">
+        <Link href="/decks">
+          <ArrowLeft />
+        </Link>
+      </Button>
+
       {gameState === 'ready' && (
         <>
           <h1 className="font-headline text-6xl font-bold">Get Ready!</h1>

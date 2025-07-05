@@ -32,7 +32,7 @@ export default function Home() {
         </p>
       </div>
       <div className="flex flex-col gap-4 w-full max-w-xs mt-16 z-10">
-        <Button asChild size="lg" className="h-14 text-xl font-bold bg-accent text-accent-foreground hover:bg-accent/90" onClick={stopMusic}>
+        <Button asChild size="lg" className="h-14 text-xl font-bold bg-accent text-accent-foreground hover:bg-accent/90">
           <Link href="/decks">
             <Play className="mr-2 h-6 w-6" />
             Start

@@ -1,12 +1,22 @@
+"use client";
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { getDecks, type WordDeck } from '@/lib/decks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { GameContainer } from '@/components/game-container';
-import { ArrowLeft, Star, Lock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, Star, Lock, Loader2 } from 'lucide-react';
+import { useMusic } from '@/hooks/use-music';
 
 function DeckCard({ deck }: { deck: WordDeck }) {
+  const { stopMusic } = useMusic();
+  const handlePlayClick = () => {
+    if (!deck.isPremium) {
+      stopMusic();
+    }
+  };
+  
   return (
     <Card className="flex flex-col justify-between hover:border-primary transition-all duration-200">
       <CardHeader>
@@ -16,7 +26,7 @@ function DeckCard({ deck }: { deck: WordDeck }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Button asChild className="w-full font-bold" disabled={deck.isPremium}>
+        <Button asChild className="w-full font-bold" disabled={deck.isPremium} onClick={handlePlayClick}>
           <Link href={`/play/${deck.id}/ready`}>
             {deck.isPremium && <Lock className="mr-2 h-4 w-4" />}
             {deck.isPremium ? 'Unlock' : 'Play'}
@@ -27,8 +37,24 @@ function DeckCard({ deck }: { deck: WordDeck }) {
   );
 }
 
-export default async function DecksPage() {
-  const decks = await getDecks();
+export default function DecksPage() {
+  const [decks, setDecks] = useState<WordDeck[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getDecks().then(data => {
+      setDecks(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <GameContainer className="flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </GameContainer>
+    );
+  }
 
   return (
     <GameContainer>
@@ -50,5 +76,3 @@ export default async function DecksPage() {
     </GameContainer>
   );
 }
-
-export const revalidate = 60; // Revalidate data every 60 seconds
